@@ -1,6 +1,9 @@
 import re
 import dns.resolver
 import smtplib
+i= 1
+color_red = "\033[31m"
+color_green = "\033[32m"
 
 def check_syntax(email):
     pattern = r'^[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$'
@@ -69,27 +72,18 @@ def verify_email(email):
 
 # Example usage:
 filename = "emails.txt"
-valid_emails = []
-invalid_emails = []
+valid_emails_file = "valid_emails.txt"
+invalid_emails_file = "invalid_emails.txt"
 
-with open(filename, 'r') as file:
+with open(filename, 'r') as file, open(valid_emails_file, 'w') as valid_file, open(invalid_emails_file, 'w') as invalid_file:
     for line in file:
         email_address = line.strip()
         valid = verify_email(email_address)
         if valid:
-            valid_emails.append(email_address)
+            valid_file.write(email_address + '\n')
+            print(color_green + email_address)
         else:
-            invalid_emails.append(email_address)
-
-valid_emails_file = "valid_emails.txt"
-invalid_emails_file = "invalid_emails.txt"
-
-with open(valid_emails_file, 'w') as file:
-    for email in valid_emails:
-        file.write(email + '\n')
-
-with open(invalid_emails_file, 'w') as file:
-    for email in invalid_emails:
-        file.write(email + '\n')
+            invalid_file.write(email_address + '\n')
+            print(color_red + email_address)
 
 print("Validation completed. Valid email addresses saved in 'valid_emails.txt'. Invalid email addresses saved in 'invalid_emails.txt'.")
