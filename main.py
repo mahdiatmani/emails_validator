@@ -41,6 +41,9 @@ def check_catch_all(email, mail_server):
         return False
 
 def verify_email(email):
+    # Remove trailing dot (".") if present
+    email = email.rstrip('.')
+
     # Step 1: Check syntax
     if not check_syntax(email):
         return False
@@ -53,7 +56,7 @@ def verify_email(email):
         return False
 
     # Step 3: Check connection
-    mail_servers = dns.resolver.query(domain, 'MX')
+    mail_servers = dns.resolver.resolve(domain, 'MX')
     for mx in mail_servers:
         if check_connection(str(mx.exchange)):
             # Step 4: Check Catch-All
@@ -65,10 +68,28 @@ def verify_email(email):
     return False
 
 # Example usage:
-email_address = input("Enter an email address: ")
-valid = verify_email(email_address)
+filename = "emails.txt"
+valid_emails = []
+invalid_emails = []
 
-if valid:
-    print(f"The email address '{email_address}' is valid.")
-else:
-    print(f"The email address '{email_address}' is not valid.")
+with open(filename, 'r') as file:
+    for line in file:
+        email_address = line.strip()
+        valid = verify_email(email_address)
+        if valid:
+            valid_emails.append(email_address)
+        else:
+            invalid_emails.append(email_address)
+
+valid_emails_file = "valid_emails.txt"
+invalid_emails_file = "invalid_emails.txt"
+
+with open(valid_emails_file, 'w') as file:
+    for email in valid_emails:
+        file.write(email + '\n')
+
+with open(invalid_emails_file, 'w') as file:
+    for email in invalid_emails:
+        file.write(email + '\n')
+
+print("Validation completed. Valid email addresses saved in 'valid_emails.txt'. Invalid email addresses saved in 'invalid_emails.txt'.")
