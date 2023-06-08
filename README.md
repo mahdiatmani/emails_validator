@@ -6,4 +6,4 @@ This is a Python script that checks whether an email list is valid by verifying 
 4. For faster result you may need to split the terminals into 4 or more also split your data (emails1.txt , emails2.txt ...)
 
 example : 
-![Alt Text]([path/to/image.png](https://i.ibb.co/C9bZ5ym/1.png))
+![Alt Text](https://i.ibb.co/C9bZ5ym/1.png)
